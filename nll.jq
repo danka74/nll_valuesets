@@ -15,5 +15,5 @@
 ] | 
 sort_by(.professional) |  # sort the list by professional term
 .[] |
-[ .sctid, .professional, .patient] | # output as tab-separated
+[ .sctid, .professional, .patient, .abbreviation?, .plural?] | # output as tab-separated
 @tsv
