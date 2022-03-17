@@ -4,7 +4,8 @@
     .code as $sctid | # save conceptId
     reduce .designation[] as $designation ({$sctid}; # for each concept reduce designations to object with sctid and relevant terms
         $designation.value as $term | # save term
-        . + reduce ($designation.extension[] | select(.url == "http://snomed.info/fhir/StructureDefinition/designation-use-context") |
+        . + reduce ($designation.extension[] | select(.url == "http://snomed.info/fhir/StructureDefinition/designation-use-context" and
+                            any(.extension[]; .url == "role" and .valueCoding.code == "900000000000548007")) | # preferred
                         .extension[]) as $duc ({}; # reduce duc extensions to object with context-based terms
             if ($duc.url == "context" and $duc.valueCoding.code == "63461000052102") then . + {"professional": $term} 
             elif ($duc.url == "context" and $duc.valueCoding.code == "63451000052100") then . + {"patient": $term} 
